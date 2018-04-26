@@ -1,21 +1,23 @@
 package com.mmall.concurrency.example.atomic;
 
 import com.mmall.concurrency.annotations.ThreadSafe;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @ThreadSafe
-public class AtomicExample1 {
+@Slf4j
+public class AtomicExample2 {
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 20;
 
-    public static AtomicInteger count = new AtomicInteger(0);
+    public static AtomicLong count = new AtomicLong(0);
 
     public static void main(String[] args) throws Exception{
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -34,8 +36,9 @@ public class AtomicExample1 {
             });
         }
         countDownLatch.await();
-        //executorService.shutdown();
-        System.out.println("count:"+count.get());
+        executorService.shutdown();
+        log.info("count:{}",count.get());
+        //System.out.println("count:"+count.get());
     }
 
     public static void add (){
